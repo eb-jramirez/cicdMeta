@@ -88,16 +88,9 @@ jobs:
     name: Check Syntax with ESLint
     runs-on: ubuntu-latest
 
-#    strategy:
-#      matrix:
-#        node-version: [18.x, 19.x, 20.x]
     strategy:
       matrix:
-        node-version: [ 18.x, 19.x, 20.x ]
-        sequence:
-          - 3
-          - 2
-          - 1
+        node-version: [18.x, 19.x, 20.x]
 
     steps:
       - name: Checkout code
@@ -145,6 +138,10 @@ jobs:
       max-parallel: 1
       matrix:
         node-version: [18.x, 19.x, 20.x]
+        sequence:
+          - 3
+          - 2
+          - 1   # Reverse order
 
     steps:
       - name: Checkout code
@@ -174,5 +171,10 @@ jobs:
             }'
 
     # Ensure sequential deployment
-    
-
+#    strategy:
+#      matrix:
+#        node-version: [18.x, 19.x, 20.x]
+#        sequence:
+#          - 3
+#          - 2
+#          - 1   # Reverse order
