@@ -137,7 +137,7 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        node-version: [18.x, 19.x, 20.x]
+        node-version: [20.x, 19.x, 18.x]
         sequence:
           - 3
           - 2
