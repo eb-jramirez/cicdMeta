@@ -88,16 +88,9 @@ jobs:
     name: Check Syntax with ESLint
     runs-on: ubuntu-latest
 
-#    strategy:
-#      matrix:
-#        node-version: [18.x, 19.x, 20.x]
     strategy:
       matrix:
-        node-version: [ 18.x, 19.x, 20.x ]
-        sequence:
-          - 1
-          - 2
-          - 3
+        node-version: [18.x, 19.x, 20.x]
 
     steps:
       - name: Checkout code
@@ -176,12 +169,3 @@ jobs:
               "app_id": "'"$APP_ID"'",
               "branch": "main"
             }'
-
-    # Ensure sequential deployment
-#    strategy:
-#      matrix:
-#        node-version: [18.x, 19.x, 20.x]
-#        sequence:
-#          - 3
-#          - 2
-#          - 1   # Reverse order
