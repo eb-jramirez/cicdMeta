@@ -169,12 +169,3 @@ jobs:
               "app_id": "'"$APP_ID"'",
               "branch": "main"
             }'
-
-    # Ensure sequential deployment
-#    strategy:
-#      matrix:
-#        node-version: [18.x, 19.x, 20.x]
-#        sequence:
-#          - 3
-#          - 2
-#          - 1   # Reverse order
