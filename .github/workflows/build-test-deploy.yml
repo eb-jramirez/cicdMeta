@@ -57,9 +57,6 @@ jobs:
     needs: tests
     runs-on: ubuntu-latest
     
-    options:
-      fail-fast: true
-    
     strategy:
       matrix:
         node-version: [17.x, 18.x, 19.x, 20.x]
@@ -86,3 +83,5 @@ jobs:
               "branch": "main",
               "sequence": '${sequence}'
             }'
+    options:
+      fail-fast: true  
