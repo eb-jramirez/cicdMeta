@@ -59,32 +59,22 @@ jobs:
     
     strategy:
       matrix:
-        node-version: [17.x, 18.x, 19.x, 20.x]
-      fail-fast: false
+        node-version:
+          - name: Deploy 2019 DEV QAT
+            versions: 20.x-19.x
+          - name: Deploy 18 STG
+            versions: 18.x
+          - name: Deploy 17 PRD
+            versions: 17.x
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Use Node.js ${{ matrix.node-version }} to Deploy
-        if: ${{ matrix.node-version == '17.x' }} || ${{ matrix.node-version == '18.x' }}
+      - name: Use Node.js ${{ matrix.node-version.versions }} to Deploy
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-
-      - name: Use Node.js ${{ matrix.node-version }} to Deploy
-        if: ${{ matrix.node-version == '19.x' }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-
-      - name: Use Node.js ${{ matrix.node-version }} to Deploy
-        if: ${{ matrix.node-version == '20.x' }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
+          node-version: ${{ matrix.node-version.versions }}
           cache: 'npm'
 
       - name: Install Dependencies
