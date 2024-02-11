@@ -73,25 +73,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Use Node.js ${{ matrix.node-version.version }} to Deploy
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version.version }}
-          cache: 'npm'
-
-      - name: Install Dependencies
-        run: npm ci
-
-      - name: Re-Deploy Application
-        env:
-          KINSTA_API_KEY: ${{ secrets.KINSTA_API_KEY }}
-          APP_ID: ${{ secrets.APP_ID }}
+      - name: Determine Sequence and Deploy
         run: |
+          if [ "${{ matrix.node-version }}" = "17.x" ]; then
+            sequence=3
+          elif [ "${{ matrix.node-version }}" = "18.x" ]; then
+            sequence=2
+          else
+            sequence=1
+          fi
           curl -i -X POST \
             https://api.kinsta.com/v2/applications/deployments \
-            -H "Authorization: Bearer $KINSTA_API_KEY" \
+            -H "Authorization: Bearer ${{ secrets.KINSTA_API_KEY }}" \
             -H "Content-Type: application/json" \
             -d '{
-              "app_id": "'"$APP_ID"'",
-              "branch": "main"
+              "app_id": "'${{ secrets.APP_ID }}'",
+              "branch": "main",
+              "sequence": '${sequence}'
             }'
