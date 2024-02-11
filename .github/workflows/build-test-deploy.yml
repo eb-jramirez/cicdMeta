@@ -138,30 +138,20 @@ jobs:
       matrix:
         node-version:
           - name: Deploy 17 and 18
-            versions: [ 17.x, 18.x ]
+            versions: [17.x, 18.x]
           - name: Deploy 19
-            versions: [ 19.x ]
+            versions: [19.x]
           - name: Deploy 20
-            versions: [ 20.x ]
-    
-    
-    #    strategy:
-#      max-parallel: 1
-#      matrix:
-#        node-version: [20.x, 19.x, 18.x, 17.x]
-#        sequence:
-#          - 3
-#          - 2
-#          - 1   # Reverse order
+            versions: [20.x]
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Use Node.js ${{ matrix.node-version }} to Deploy
+      - name: Use Node.js ${{ matrix.node-version.versions }} to Deploy
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: ${{ matrix.node-version.versions }}
           cache: 'npm'
 
       - name: Install Dependencies
