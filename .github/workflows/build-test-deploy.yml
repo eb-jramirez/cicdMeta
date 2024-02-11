@@ -1,80 +1,3 @@
-#name: Build, Test, and Deploy
-#
-#on:
-#  push:
-#    branches: "main"
-#  pull_request:
-#    branches: "main"
-#
-#jobs:
-#  eslint:
-#    name: Check Syntax with ESLint
-#    runs-on: ubuntu-latest
-#
-#    strategy:
-#      matrix:
-#        node-version: [18.x, 19.x, 20.x]
-#
-#    steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v3
-#        
-#      - name: Use Node.js ${{ matrix.node-version }} to Check Lint
-#        uses: actions/setup-node@v3
-#        with:
-#          node-version: ${{ matrix.node-version }}
-#          cache: 'npm'
-#          
-#      - name: Install Dependencies
-#        run: npm ci
-#        
-#      - name: Run ESLint
-#        run: npm run lint
-#
-#  tests:
-#    name: Run Tests
-#    needs: eslint
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v3
-#        
-#      - name: Use Node.js 18.x to run Test
-#        uses: actions/setup-node@v3
-#        with:
-#          node-version: 18.x
-#          cache: 'npm'
-#          
-#      - name: Install Dependencies
-#        run: npm ci
-#        
-#      - name: Run Tests
-#        run: npm run test
-#
-#  deploy:
-#    name: Re-Deploy Application
-#    needs: [eslint, tests]
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#      - name: Deploy to Kinsta
-#        env:
-#          KINSTA_API_KEY: ${{ secrets.KINSTA_API_KEY }}
-#          APP_ID: ${{ secrets.APP_ID }}
-#        run: |
-#          curl -i -X POST \
-#            https://api.kinsta.com/v2/applications/deployments \
-#            -H "Authorization: Bearer $KINSTA_API_KEY" \
-#            -H "Content-Type: application/json" \
-#            -d '{
-#              "app_id": "'"$APP_ID"'",
-#              "branch": "main"
-#            }'
-#
-#
-# Add more jobs if needed...
-
 name: Build, Test, and Deploy
 
 on:
@@ -90,7 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x, 19.x, 20.x]
+        node-version: [17.x, 18.x, 19.x, 20.x]
 
     steps:
       - name: Checkout code
@@ -134,39 +57,32 @@ jobs:
     needs: tests
     runs-on: ubuntu-latest
     
+    options:
+      fail-fast: true
+    
     strategy:
       matrix:
-        node-version:
-          - name: Deploy 17 and 18
-            versions: [17.x, 18.x]
-          - name: Deploy 19
-            versions: [19.x]
-          - name: Deploy 20
-            versions: [20.x]
+        node-version: [17.x, 18.x, 19.x, 20.x]
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Use Node.js ${{ matrix.node-version.versions }} to Deploy
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version.versions }}
-          cache: 'npm'
-
-      - name: Install Dependencies
-        run: npm ci
-
-      - name: Re-Deploy Application
-        env:
-          KINSTA_API_KEY: ${{ secrets.KINSTA_API_KEY }}
-          APP_ID: ${{ secrets.APP_ID }}
+      - name: Determine Sequence and Deploy
         run: |
+          if [ "${{ matrix.node-version }}" = "17.x" ]; then
+            sequence=3
+          elif [ "${{ matrix.node-version }}" = "18.x" ]; then
+            sequence=2
+          else
+            sequence=1
+          fi
           curl -i -X POST \
             https://api.kinsta.com/v2/applications/deployments \
-            -H "Authorization: Bearer $KINSTA_API_KEY" \
+            -H "Authorization: Bearer ${{ secrets.KINSTA_API_KEY }}" \
             -H "Content-Type: application/json" \
             -d '{
-              "app_id": "'"$APP_ID"'",
-              "branch": "main"
+              "app_id": "'${{ secrets.APP_ID }}'",
+              "branch": "main",
+              "sequence": '${sequence}'
             }'
