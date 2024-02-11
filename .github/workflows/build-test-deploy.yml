@@ -61,7 +61,7 @@ jobs:
       matrix:
         node-version:
           - name: Deploy 2019 DEV QAT
-            versions: "20.x 19.x"
+            versions: "20.x, 19.x"
           - name: Deploy 18 STG
             versions: "18.x"
           - name: Deploy 20 PRD
