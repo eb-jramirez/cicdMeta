@@ -133,11 +133,22 @@ jobs:
     name: Re-Deploy Application
     needs: tests
     runs-on: ubuntu-latest
-
+    
     strategy:
-      max-parallel: 1
       matrix:
-        node-version: [20.x, 19.x, 18.x]
+        node-version:
+          - name: Deploy 17 and 18
+            versions: [ 17.x, 18.x ]
+          - name: Deploy 19
+            versions: [ 19.x ]
+          - name: Deploy 20
+            versions: [ 20.x ]
+    
+    
+    #    strategy:
+#      max-parallel: 1
+#      matrix:
+#        node-version: [20.x, 19.x, 18.x, 17.x]
 #        sequence:
 #          - 3
 #          - 2
