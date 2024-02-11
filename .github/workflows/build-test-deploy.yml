@@ -90,7 +90,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x, 19.x, 20.x]
+        node-version: [17.x, 18.x, 19.x, 20.x]
 
     steps:
       - name: Checkout code
@@ -137,12 +137,12 @@ jobs:
     strategy:
       matrix:
         node-version:
-          - name: Deploy 17 and 18
-            versions: [17.x, 18.x]
-          - name: Deploy 19
-            versions: [19.x]
-          - name: Deploy 20
-            versions: [20.x]
+          - name: Deploy 2019 DEV
+            versions: [20.x, 19.x]
+          - name: Deploy 18 QAT
+            versions: [18.x]
+          - name: Deploy 20 PRD
+            versions: [17.x]
 
     steps:
       - name: Checkout code
