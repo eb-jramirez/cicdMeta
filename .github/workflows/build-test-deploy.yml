@@ -83,6 +83,4 @@ jobs:
               "app_id": "'${{ secrets.APP_ID }}'",
               "branch": "main",
               "sequence": '${sequence}'
-            }'
-    options:
-      fail-fast: true  
+            }'  
