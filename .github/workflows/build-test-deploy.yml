@@ -60,21 +60,23 @@ jobs:
     strategy:
       matrix:
         node-version:
-          - name: Deploy 2019 DEV QAT
-            versions: 20.x-19.x
-          - name: Deploy 18 STG
-            versions: 18.x
-          - name: Deploy 17 PRD
-            versions: 17.x
+          - version: 17.x
+            sequence: 3
+          - version: 18.x
+            sequence: 2
+          - version: 19.x
+            sequence: 1
+          - version: 20.x
+            sequence: 1
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Use Node.js ${{ matrix.node-version.versions }} to Deploy
+      - name: Use Node.js ${{ matrix.node-version.version }} to Deploy
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version.versions }}
+          node-version: ${{ matrix.node-version.version }}
           cache: 'npm'
 
       - name: Install Dependencies
